@@ -5,30 +5,31 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   late Database database;
 
-  //데이터 베이스 초기화 및 열기
+  // 데이터베이스 초기화 및 열기
   Future<void> initDatabase() async {
-    //데이터 베이스 경로 가져오기
+    // 데이터베이스 경로 가져오기
     String path = join(await getDatabasesPath(), 'idea_note.db');
 
-    //데이터 베이스 열기 또는 생성
+    // 데이터베이스 열기 또는 생성
     database = await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) {
-        //데이터 베이스가 생성될때 실행하는 코드
-        //테이브를 만든다 만약 tb_idea라는 테이블이 존재하지 않는다면 아래의 테이블를 만들어라
-        db.execute('''CREATE TABLE IF NOT EXISTS tb_idea(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-         title Text,
-          motive Text,
-           content Text,
-            priority Integer,
-             memo Text,
-              createdAt Integer
-      )''');
+        // 데이터베이스가 생성될 때 실행하는 코드
+        // 테이블을 만든다. 만약 'tb_idea'라는 테이블이 존재하지 않는다면 아래의 테이블을 만들어라
+        db.execute('''CREATE TABLE IF NOT EXISTS tb_idea (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT,
+          motive TEXT,
+          content TEXT,
+          priority REAL,
+          memo TEXT,
+          createdAt INTEGER
+        )''');
       },
     );
   }
+
 
   //IdeaInfo 데이터 삽입(insert)
   Future<int> insertIdeaInfo(IdeaInfo idea) async {
@@ -37,7 +38,7 @@ class DatabaseHelper {
 
   //IdeaInfo 데이터 조회(select)
   Future<List<IdeaInfo>> getAllIdeaInfo() async {
-    final List<Map<String, dynamic>> result = await database.query('ta_idea');
+    final List<Map<String, dynamic>> result = await database.query('tb_idea');
     return List.generate(result.length, (index) {
       return IdeaInfo.fromMap(result[index]);
     },);

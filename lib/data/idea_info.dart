@@ -3,7 +3,7 @@ class IdeaInfo {
   String title; // 아이디어 제목
   String motive; // 작성 계기
   String content; // 아이디어내용
-  int priority; //아이디어 중요도 점수
+  double priority; //아이디어 중요도 점수
   String memo; // 간단메모
   int createdAt; //생성 일시
 
@@ -28,7 +28,7 @@ class IdeaInfo {
       'content': content,
       'priority': priority,
       'memo': memo,
-      'created': createdAt,
+      'createdAt': createdAt,
     };
   }
 

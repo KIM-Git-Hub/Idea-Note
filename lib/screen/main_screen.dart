@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/database/database_helper.dart';
+import 'package:intl/intl.dart';
 
 import '../data/idea_info.dart';
 
@@ -16,7 +18,8 @@ class _MainScreenState extends State<MainScreen> {
   List<IdeaInfo> listIdeaInfo = []; // 아이디어 목록들
 
   @override
-  void initState() { //위젯이 생성될때 처음으로 호출되는 메서드 이다. initState는 오직 한번 만 호출 된다.
+  void initState() {
+    //위젯이 생성될때 처음으로 호출되는 메서드 이다. initState는 오직 한번 만 호출 된다.
     super.initState();
     //아이디어 목록들 가져오기
     getIdeaInfo();
@@ -40,18 +43,18 @@ class _MainScreenState extends State<MainScreen> {
       body: Container(
         margin: EdgeInsets.all(15),
         child: ListView.builder(
-          itemCount: 10,
+          itemCount: listIdeaInfo.length,
           itemBuilder: (context, index) {
             return listItem(index);
           },
         ),
       ),
-     floatingActionButton: FloatingActionButton(
-       onPressed: () {
-         ///새 아이디어 작성 화면으로 이동
-       },
-       child: Icon(Icons.add)
-     ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            ///새 아이디어 작성 화면으로 이동
+            context.push('/edit');
+          },
+          child: Icon(Icons.add)),
     );
   }
 
@@ -74,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
             child: Container(
               margin: EdgeInsets.only(top: 8, left: 15),
               child: Text(
-                'Exam Text',
+                listIdeaInfo[index].title,
                 style: TextStyle(fontSize: 15),
               ),
             ),
@@ -86,7 +89,9 @@ class _MainScreenState extends State<MainScreen> {
               child: Container(
                 margin: EdgeInsets.only(bottom: 8, right: 15),
                 child: Text(
-                  '2023.11.03 17:42',
+                  DateFormat("yyyy.MM.dd HH:mm").format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          listIdeaInfo[index].createdAt)),
                   style: TextStyle(
                     color: Color(0xffaeaeae),
                     fontSize: 10,
@@ -99,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
             child: Container(
               margin: EdgeInsets.only(bottom: 8, left: 15),
               child: RatingBar.builder(
-                initialRating: 3,
+                initialRating: listIdeaInfo[index].priority,
                 minRating: 1,
                 itemCount: 5,
                 direction: Axis.horizontal,
@@ -122,7 +127,18 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Future <void> getIdeaInfo() async {
-      // idea 정보들을 가지고 와서 멤버 (전역) 변수 리스트 객체에 담기
+  Future<void> getIdeaInfo() async {
+    // idea 정보들을 가지고 와서 멤버 (전역) 변수 리스트 객체에 담기
+    await dbHelper.initDatabase();
+    //idea 정보들을 가지고 와서 멤버 변수 리스트 객체에 담기
+    listIdeaInfo = await dbHelper
+        .getAllIdeaInfo(); // database_helper의 getAllIdeaInfo (데이터 조회)
+    //리스트 객체 역순으로 정렬
+    listIdeaInfo.sort(
+      (a, b) => b.createdAt.compareTo(a.createdAt),
+    );
+    setState(() {
+      //리스트 갱신, ui업데이트
+    });
   }
 }
