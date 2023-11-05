@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/database/database_helper.dart';
+import 'package:idea_note_app/main.dart';
 import 'package:intl/intl.dart';
 
 import '../data/idea_info.dart';
@@ -45,7 +46,10 @@ class _MainScreenState extends State<MainScreen> {
         child: ListView.builder(
           itemCount: listIdeaInfo.length,
           itemBuilder: (context, index) {
-            return listItem(index);
+            return GestureDetector(child:listItem(index), onTap: () {
+              // 몇번째 인덱스를 클릭했는가을 알기 위해 정보전달
+                context.push('/detail', extra: listIdeaInfo[index]);
+            },);
           },
         ),
       ),
@@ -53,6 +57,7 @@ class _MainScreenState extends State<MainScreen> {
           onPressed: () {
             ///새 아이디어 작성 화면으로 이동
             context.push('/edit');
+
           },
           child: Icon(Icons.add)),
     );

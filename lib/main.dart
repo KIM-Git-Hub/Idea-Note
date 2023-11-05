@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/color_schemes.g.dart';
 import 'package:idea_note_app/data/idea_info.dart';
+import 'package:idea_note_app/screen/detail_screen.dart';
 
 import 'package:idea_note_app/screen/main_screen.dart';
 import 'package:idea_note_app/screen/splash_screen.dart';
@@ -11,6 +12,7 @@ import 'screen/edit_screen.dart';
 void main() {
   runApp(const MyApp());
 }
+
 
 final GoRouter router = GoRouter(
   initialLocation: '/splash',
@@ -26,7 +28,15 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/edit',
       builder: (context, state) => EditScreen(),
-    )
+    ),
+    GoRoute(
+      path: '/detail',
+      builder: (context, state) {
+        IdeaInfo ideaInfo = state.extra as IdeaInfo;
+        return DetailScreen(ideaInfo: ideaInfo,);
+
+      }
+    ),
   ],
 );
 
