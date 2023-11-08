@@ -28,8 +28,12 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/edit',
       builder: (context, state){
-        IdeaInfo ideaInfo = state.extra as IdeaInfo;
-        return EditScreen(ideaInfo: ideaInfo,);
+        if(state.extra != null){
+          IdeaInfo ideaInfo = state.extra as IdeaInfo;
+          return EditScreen(ideaInfo: ideaInfo,);
+        }else{
+          return EditScreen();
+        }
       }
     ),
     GoRoute(

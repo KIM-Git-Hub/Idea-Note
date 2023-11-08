@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/data/idea_info.dart';
 import 'package:idea_note_app/database/database_helper.dart';
 
+
 class EditScreen extends StatefulWidget {
   IdeaInfo? ideaInfo;
 
@@ -18,26 +19,19 @@ class _EditScreenState extends State<EditScreen> {
   final TextEditingController contentController = TextEditingController();
   final TextEditingController memoController = TextEditingController();
   double sliderValue = 0.0;
-  List<String> sliderValueString = [
-    "X",
-    "★",
-    "★★",
-    "★★★",
-    "★★★★",
-    "★★★★★"
-  ];
+  List<String> sliderValueString = ["X", "★", "★★", "★★★", "★★★★", "★★★★★"];
   final dbHelper = DatabaseHelper();
 
   @override
   void initState() {
     super.initState();
     //기존 데이터를 수정할 경우
-    if(widget.ideaInfo != null){
+    if (widget.ideaInfo != null) {
       titleController.text = widget.ideaInfo!.title;
       motiveController.text = widget.ideaInfo!.motive;
       contentController.text = widget.ideaInfo!.content;
       sliderValue = widget.ideaInfo!.priority;
-      if(widget.ideaInfo!.memo.isNotEmpty){
+      if (widget.ideaInfo!.memo.isNotEmpty) {
         memoController.text = widget.ideaInfo!.memo; // 메모 작성이 필수가 아니기 때문
       }
     }
@@ -226,11 +220,23 @@ class _EditScreenState extends State<EditScreen> {
                             motive: motiveValue,
                             content: contentValue,
                             priority: sliderValue,
-                            memo: memoValue,
+                            memo: memoValue.isNotEmpty ? memoValue : '',
                             createdAt: DateTime.now().millisecondsSinceEpoch);
 
-                            await setInsertIdeaInfo(ideaInfo);
-                            context.pop();
+                        await setInsertIdeaInfo(ideaInfo);
+                        context.pop('insert');
+                      } else {
+                        //업데이트 하는 경우
+                        var ideaInfoModify = widget.ideaInfo;
+                        ideaInfoModify?.title = titleValue;
+                        ideaInfoModify?.motive = motiveValue;
+                        ideaInfoModify?.content = contentValue;
+                        ideaInfoModify?.priority = sliderValue;
+                        ideaInfoModify?.memo =
+                            memoValue.isNotEmpty ? memoValue : '';
+
+                        await setUpdateIdeaInfo(ideaInfoModify!);
+                        context.pop('update');
                       }
                     },
                     child: Text('저장하기')),
@@ -246,5 +252,11 @@ class _EditScreenState extends State<EditScreen> {
     //삽입하는 메소드
     await dbHelper.initDatabase();
     await dbHelper.insertIdeaInfo(ideaInfo);
+  }
+
+  Future setUpdateIdeaInfo(IdeaInfo ideaInfo) async {
+    // 업데이트
+    await dbHelper.initDatabase();
+    await dbHelper.updateIdeaInfo(ideaInfo);
   }
 }

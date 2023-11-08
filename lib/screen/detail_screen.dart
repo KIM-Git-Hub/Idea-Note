@@ -3,13 +3,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/data/idea_info.dart';
 import 'package:idea_note_app/database/database_helper.dart';
-import 'package:idea_note_app/main.dart';
+
 
 class DetailScreen extends StatelessWidget {
   IdeaInfo? ideaInfo;
-  final dbHelper = DatabaseHelper();
 
   DetailScreen({super.key, this.ideaInfo});
+
+  final dbHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +53,9 @@ class DetailScreen extends StatelessWidget {
                             )),
                         TextButton(
                             onPressed: () async {
-                              if (context.mounted) {
-                                await setDeleteIdeaInfo(ideaInfo!.id!);
-                                context.pop(); // 팝업종료
-                                context.pop(); // 이전 화면
-                              }
+                              await setDeleteIdeaInfo(ideaInfo!.id!);
+                              context.pop(); // 팝업종료
+                              context.pop('delete'); // 이전 화면
                             },
                             child: Text(
                               '삭제',
@@ -173,8 +172,13 @@ class DetailScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                onPressed: ()  {
-                  context.push('/edit', extra: ideaInfo);
+                onPressed: () async {
+                  var result = await context.push('/edit', extra: ideaInfo);
+                  if(result != null){
+                    if(result == 'update'){
+                      context.pop('update');
+                    }
+                  }
                 },
                 child: Text('내용편집하기')),
           )
@@ -188,3 +192,4 @@ class DetailScreen extends StatelessWidget {
     await dbHelper.deleteIdeaInfo(id);
   }
 }
+

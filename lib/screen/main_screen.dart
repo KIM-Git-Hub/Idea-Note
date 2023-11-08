@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/database/database_helper.dart';
-import 'package:idea_note_app/main.dart';
 import 'package:intl/intl.dart';
 
 import '../data/idea_info.dart';
@@ -46,18 +45,42 @@ class _MainScreenState extends State<MainScreen> {
         child: ListView.builder(
           itemCount: listIdeaInfo.length,
           itemBuilder: (context, index) {
-            return GestureDetector(child:listItem(index), onTap: () {
-              // 몇번째 인덱스를 클릭했는가을 알기 위해 정보전달
-                context.push('/detail', extra: listIdeaInfo[index]);
-            },);
+            return GestureDetector(
+              child: listItem(index),
+              onTap: () async {
+                // 몇번째 인덱스를 클릭했는가을 알기 위해 정보전달
+                var result =
+                    await context.push('/detail', extra: listIdeaInfo[index]);
+                if (result != null) {
+                  if (result == 'delete') {
+                    getIdeaInfo();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('삭제완료')));
+                  } else if (result == 'update') {
+                    getIdeaInfo();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('수정완료')));
+                  }
+                }
+              },
+            );
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             ///새 아이디어 작성 화면으로 이동
-            context.push('/edit');
-
+            // editScreen 에서 pop 되서 돌아오면 화면 갱신
+            //main -> edit -> main 화면으로 돌아왔을떄  edit로 부터 결과 값을 전달 받았을때
+            var result = await context.push('/edit');
+            //pop 에서 돌아올떄 result가  특정 인자값을 넘겨 받을수 있다.
+            if (result != null) {
+              if (result == 'insert') {
+                getIdeaInfo();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('작성완료')));
+              }
+            }
           },
           child: Icon(Icons.add)),
     );
