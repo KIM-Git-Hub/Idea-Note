@@ -29,6 +29,21 @@ class _EditScreenState extends State<EditScreen> {
   final dbHelper = DatabaseHelper();
 
   @override
+  void initState() {
+    super.initState();
+    //기존 데이터를 수정할 경우
+    if(widget.ideaInfo != null){
+      titleController.text = widget.ideaInfo!.title;
+      motiveController.text = widget.ideaInfo!.motive;
+      contentController.text = widget.ideaInfo!.content;
+      sliderValue = widget.ideaInfo!.priority;
+      if(widget.ideaInfo!.memo.isNotEmpty){
+        memoController.text = widget.ideaInfo!.memo; // 메모 작성이 필수가 아니기 때문
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +60,7 @@ class _EditScreenState extends State<EditScreen> {
           },
         ),
         title: Text(
-          '아이디어 작성',
+          widget.ideaInfo == null ? '아이디어 작성' : '아이디어 편집',
           style: TextStyle(fontSize: 15),
         ),
       ),
