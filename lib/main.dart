@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:idea_note_app/color_schemes.g.dart';
 import 'package:idea_note_app/data/idea_info.dart';
 import 'package:idea_note_app/screen/detail_screen.dart';
-
 import 'package:idea_note_app/screen/main_screen.dart';
 import 'package:idea_note_app/screen/splash_screen.dart';
 
@@ -58,7 +56,7 @@ class MyApp extends StatelessWidget {
       title: 'Idea Note',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: lightColorScheme,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
     );
   }

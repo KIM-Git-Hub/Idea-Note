@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:idea_note_app/data/idea_info.dart';
 import 'package:idea_note_app/database/database_helper.dart';
 
-
 class DetailScreen extends StatelessWidget {
   IdeaInfo? ideaInfo;
 
@@ -16,20 +15,21 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         leading: GestureDetector(
           child: Icon(
             Icons.arrow_back_ios_new,
             size: 25,
-            color: Colors.black,
           ),
           onTap: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          ideaInfo!.title,
-          style: TextStyle(fontSize: 15),
+        title: Container(
+          alignment: Alignment.center,
+          child: Text(
+            ideaInfo!.title,
+            style: TextStyle(fontSize: 20),
+          ),
         ),
         actions: [
           TextButton(
@@ -40,16 +40,16 @@ class DetailScreen extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text('삭제?'),
-                      content: Text('아이디어를 삭제할거에용?'),
+                      title: Text('削除'),
+                      content: Text('アイデアを削除しますか？'),
                       actions: [
                         TextButton(
                             onPressed: () {
                               context.pop();
                             },
                             child: Text(
-                              '취소',
-                              style: TextStyle(color: Colors.grey),
+                              'キャンセル',
+                              style: TextStyle(color: Colors.black),
                             )),
                         TextButton(
                             onPressed: () async {
@@ -58,8 +58,10 @@ class DetailScreen extends StatelessWidget {
                               context.pop('delete'); // 이전 화면
                             },
                             child: Text(
-                              '삭제',
-                              style: TextStyle(color: Colors.red),
+                              '削除',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
                             ))
                       ],
                     );
@@ -67,7 +69,7 @@ class DetailScreen extends StatelessWidget {
                 );
               },
               child: Text(
-                '삭제',
+                '削除',
                 style: TextStyle(color: Colors.red, fontSize: 16),
               ))
         ],
@@ -83,80 +85,114 @@ class DetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '아이디어를 떠울린 계기',
+                      'アイデアを思いついたきっかけ',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(top: 8),
+                      height: 40,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      child: Text(
+                        ideaInfo!.motive,
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Color(0xffd9d9d9)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: double.infinity,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
                     Text(
-                      ideaInfo!.motive,
+                      'アイデアの内容',
                       style: TextStyle(
-                        color: Color(0xffa5a5a5),
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(top: 8),
+                      height: 150,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Text(
+                        ideaInfo!.content,
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Color(0xffd9d9d9)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: double.infinity,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      '重要度',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 8),
+                      child: RatingBar.builder(
+                        initialRating: ideaInfo!.priority,
+                        minRating: 1,
+                        itemCount: 5,
+                        direction: Axis.horizontal,
+                        itemSize: 50,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 0),
+                        itemBuilder: (context, index) {
+                          return Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          );
+                        },
+                        ignoreGestures: true,
+                        updateOnDrag: false,
+                        onRatingUpdate: (value) {},
                       ),
                     ),
                     SizedBox(
                       height: 30,
                     ),
                     Text(
-                      '아이디어내용',
+                      'メモ',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      ideaInfo!.content,
-                      style: TextStyle(
-                        color: Color(0xffa5a5a5),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(top: 8),
+                      height: 150,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Text(
+                        ideaInfo!.memo,
+                        style: TextStyle(color: Colors.black, fontSize: 12),
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      '별갯수',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Color(0xffd9d9d9)),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                    RatingBar.builder(
-                      initialRating: ideaInfo!.priority,
-                      minRating: 1,
-                      itemCount: 5,
-                      direction: Axis.horizontal,
-                      itemSize: 35,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                      itemBuilder: (context, index) {
-                        return Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        );
-                      },
-                      ignoreGestures: true,
-                      updateOnDrag: false,
-                      onRatingUpdate: (value) {},
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      '메모',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      ideaInfo!.memo,
-                      style: TextStyle(
-                        color: Color(0xffa5a5a5),
-                      ),
+                      width: double.infinity,
                     ),
                   ],
                 ),
@@ -174,13 +210,13 @@ class DetailScreen extends StatelessWidget {
                 ),
                 onPressed: () async {
                   var result = await context.push('/edit', extra: ideaInfo);
-                  if(result != null){
-                    if(result == 'update'){
+                  if (result != null) {
+                    if (result == 'update') {
                       context.pop('update');
                     }
                   }
                 },
-                child: Text('내용편집하기')),
+                child: Text('編集', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)),
           )
         ],
       ),
@@ -192,4 +228,3 @@ class DetailScreen extends StatelessWidget {
     await dbHelper.deleteIdeaInfo(id);
   }
 }
-

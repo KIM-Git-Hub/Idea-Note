@@ -29,14 +29,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          'Idea Note',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
+        title: Container(
+          alignment: Alignment.center,
+          margin: EdgeInsets.all(15),
+          child: Text(
+            'Idea Note',
+            style: TextStyle(
+              fontSize: 30,
+            ),
           ),
         ),
       ),
@@ -55,11 +55,11 @@ class _MainScreenState extends State<MainScreen> {
                   if (result == 'delete') {
                     getIdeaInfo();
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('삭제완료')));
+                        .showSnackBar(SnackBar(content: Text('削除しました。')));
                   } else if (result == 'update') {
                     getIdeaInfo();
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('수정완료')));
+                        .showSnackBar(SnackBar(content: Text('修正しました。')));
                   }
                 }
               },
@@ -78,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
               if (result == 'insert') {
                 getIdeaInfo();
                 ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('작성완료')));
+                    .showSnackBar(SnackBar(content: Text('作成しました。')));
               }
             }
           },
@@ -111,7 +111,6 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           Align(
-
               ///기록 날짜
               alignment: Alignment.bottomRight,
               child: Container(
@@ -121,7 +120,7 @@ class _MainScreenState extends State<MainScreen> {
                       DateTime.fromMillisecondsSinceEpoch(
                           listIdeaInfo[index].createdAt)),
                   style: TextStyle(
-                    color: Color(0xffaeaeae),
+                    color: Colors.black,
                     fontSize: 10,
                   ),
                 ),
