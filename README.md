@@ -1,6 +1,7 @@
 # Idea Note
 
-IdeaNoteApp
+IdeaNoteApp</br>
+(go_router / sqflite / Material Design 3 / flutter_rating_bar)
 
 ## Usage
 <img src="https://github.com/KIM-Git-Hub/Idea-Note/assets/100995721/e627f56c-97f3-4662-a91c-9d1d2e81f1d9" width="30%" height="30%">
